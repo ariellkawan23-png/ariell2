@@ -493,7 +493,7 @@ footer{padding:26px 0;font-family:var(--mono);font-size:.66rem;letter-spacing:.1
         <div class="fallback"><p class="kind">Investigação PF · Portal institucional</p><p class="op">Recursos previdenciários</p></div>
       </div>
       <div class="body">
-        <p class="dateline">Maceió, AL · 08.2026 · Portal da Polícia Federal</p>
+        <p class="dateline">Maceió, AL · 10.08.2026 · Portal da Polícia Federal</p>
         <h3>PF investiga aplicação de recursos previdenciários em Maceió/AL</h3>
         <p>Apuração sobre a destinação de recursos previdenciários no município de Maceió, em Alagoas.</p>
         <a class="open" href="https://www.gov.br/pf/pt-br/assuntos/noticias/2026/08/pf-investiga-aplicacao-de-recursos-previdenciarios-em-maceio-al" target="_blank" rel="noopener">Abrir publicação ↗</a>
@@ -533,13 +533,21 @@ footer{padding:26px 0;font-family:var(--mono);font-size:.66rem;letter-spacing:.1
 
 <script>
 (function(){
-  /* IDs das fotos do Google Drive, na ordem em que devem aparecer.
-     Cada ID e o trecho entre /d/ e /view do link de compartilhamento do arquivo.
+  /* Fotos do Google Drive, na ordem em que devem aparecer.
+     Pode colar o link de compartilhamento inteiro de cada foto ou so o ID.
      Com a lista vazia, a secao mostra a pasta embutida do Drive. */
-  var FOTOS = [];
+  var FOTOS = [
+  ];
 
   var carrossel = document.getElementById('carrossel');
   var embed = document.getElementById('drive-embed');
+
+  /* aceita "1AbC...", ".../d/1AbC.../view" ou "...open?id=1AbC..." */
+  FOTOS = FOTOS.map(function(v){
+    var m = String(v).match(/[-\w]{25,}/);
+    return m ? m[0] : '';
+  }).filter(Boolean);
+
   if(!FOTOS.length) return;
 
   embed.remove();
@@ -557,6 +565,7 @@ footer{padding:26px 0;font-family:var(--mono);font-size:.66rem;letter-spacing:.1
     img.src = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1600';
     img.alt = 'Foto ' + (i + 1) + ' de ' + FOTOS.length;
     img.loading = i < 2 ? 'eager' : 'lazy';
+    img.addEventListener('error', function(){ fig.hidden = true; sincronizar(); });
     fig.appendChild(img);
     trilho.appendChild(fig);
 
